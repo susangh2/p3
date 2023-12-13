@@ -1,0 +1,67 @@
+# Visualize on https://erd.surge.sh
+#
+# Relationship Types
+#  -    - one to one
+#  -<   - one to many
+#  >-   - many to one
+#  >-<  - many to many
+#  -0   - one to zero or one
+#  0-   - zero or one to one
+#  0-0  - zero or one to zero or one
+#  -0<  - one to zero or many
+#  >0-  - zero or many to one
+#
+////////////////////////////////////
+
+users
+----
+id pk
+username varchar(64) unique
+email varchar(64) unique
+hash_password char(60)
+sex varchar(10)
+birthday date
+height numeric
+weight numeric
+active_level fk >- active_level.id
+ideal_weight numeric null
+
+active_level
+----
+id pk
+active_level enum
+
+food
+----
+id pk
+foodname varchar
+calories numeric
+protein numeric
+surgar numeric
+serving numeric
+
+users_meal_record
+----
+id pk
+userid fk >- users.id
+foodid fk >- food.id
+user_photo_filename varchar
+timestamp timestamp
+
+
+calories_Consumption
+-----
+id pk
+sport_name varchar(60)
+consumption numeric
+
+
+
+
+# view: (359, 129)
+# zoom: 1.000
+# users_meal_record (1290, 263)
+# calories_Consumption (1157, 793)
+# users (574, 390)
+# active_level (173, 547)
+# food (1008, 497)

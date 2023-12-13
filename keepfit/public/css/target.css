@@ -1,0 +1,52 @@
+body {
+    background-color: #CBD5C0;
+}
+#target-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    border: 1px solid;
+    padding: 60px;
+    border-radius: 15%;
+    color:#56624b;
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#profileheader {
+    font-family: 'Montserrat', sans-serif; 
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.custom-select {
+    appearance: none; 
+    padding: 4px; 
+    font-size: 16px; 
+    border: 2px solid #ccc; 
+    border-radius: 4px; 
+    background-color: #ffffff; 
+    color: #56624b; 
+    outline: none; 
+    cursor: pointer;
+    height: auto;
+    overflow: visible; 
+  }
+  
+  .custom-select:hover {
+    background-color: #ebebeb; 
+  }
+  
+  .custom-select:active,
+  .custom-select:focus {
+    background-color: #cfcfcf; 
+  }

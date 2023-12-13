@@ -1,0 +1,64 @@
+label {
+    font-family: "Roboto", sans-serif;
+    font-size:20px;
+    text-transform: uppercase;
+
+}
+.profile-form-container {
+    display:flex;
+    justify-content:center;
+}
+
+form {
+    display: inline-block;
+    border: 1px solid;
+    padding: 60px;
+    border-radius: 10px;
+    color:#56624b;
+    background-color: white;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#profileheader {
+    font-family: 'Montserrat', sans-serif; 
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+label {
+    font-family: 'Montserrat', sans-serif;  
+}
+
+input {
+    font-family: 'Montserrat', sans-serif;  
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    font-size:18px;
+    margin-top: 1px;
+    margin-bottom: 15px;
+}
+
+select {
+    margin-bottom: 15px;
+    font-size:20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+button {
+    font-family: 'Montserrat', sans-serif;
+    font-size:15px;
+}
+
+.bottom-btn {
+    display: flex;
+    justify-content: center;
+    gap:2rem;
+}
+
+body {
+    background-color: #CBD5C0;
+}

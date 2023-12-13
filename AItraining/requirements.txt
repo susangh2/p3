@@ -1,0 +1,7 @@
+pillow==10.0.1
+tensorflow-estimator==2.13.0
+# tensorflow-macos==2.13.0
+# tensorflow-metal==1.0.1
+protobuf==3.20.3
+tensorflow==2.13.0
+sanic==23.6.0

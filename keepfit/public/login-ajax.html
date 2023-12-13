@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="/public/css/login.css" rel="stylesheet" />
+  </head>
+  <body>
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <div class="login">
+      <h2 class="active">sign in</h2>
+
+      <h2 class="nonactive">sign up</h2>
+      <form action="/user/login-ajax" method="post" onsubmit="login2(event)">
+        <input type="text" class="text" name="username" />
+        <span>username</span>
+
+        <br />
+
+        <br />
+
+        <input type="password" class="text" name="password" />
+        <span>password</span>
+        <br />
+
+        <input type="checkbox" id="checkbox-1-1" class="custom-checkbox" />
+        <label for="checkbox-1-1">Keep me Signed in</label>
+
+        <button class="signin">Sign In</button>
+
+        <p id="message"></p>
+
+        <hr />
+
+        <a href="#">Forgot Password?</a>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
+    <script>
+      async function login(event) {
+        event.preventDefault();
+        let form = event.target;
+        let res = await fetch('/user/login-ajax', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: form.username.value,
+            password: form.password.value,
+          }),
+        });
+        let json = await res.json();
+      }
+
+      async function login2(event) {
+        let res = await submitJSON(event);
+        let json = await res.json();
+        console.log('login result:', json);
+        if (json.id) {
+          location.href = '/profile.html?id=' + json.id;
+        }
+        message.textContent = json.message || '';
+      }
+    </script>
+  </body>
+</html>

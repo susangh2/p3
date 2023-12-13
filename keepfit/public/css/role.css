@@ -1,0 +1,23 @@
+[data-role="user"] [data-for="guest"] {
+    display: none;
+  }
+[data-role="guest"] [data-for="user"] {
+    display: none;
+  }
+
+  /* [data-role="user"] .target-nav-btn {
+    display: initial;
+  }
+
+  [data-role="user"] .mealrecord-nav-btn {
+    display: initial;
+  }
+
+  [data-role="user"] .profile-nav-btn {
+    display: initial;
+  } */
+
+  a {
+    color :#7c7c7d;
+    margin-left: 10px;
+  }

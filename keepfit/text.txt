@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;1,200&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="css/target.css" rel="stylesheet" />
+    <title>Document</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">KeepFit</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Registration</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Meal Record</a>
+          </li>
+        </ul>
+        </form>
+      </div>
+    </nav>
+    <div id="target-form">
+    <form >
+      <div id="profileheader">Your Target</div>
+    <div id="profileNode" data-template="profile" data-bind="userTarget"></div>
+    <template data-name="profile">
+      <table>
+        <tr>
+          <td>Current Weight:</td>
+          <td data-text="weight"></td>
+        </tr>
+        <tr>
+          <td>Ideal Weight:</td>
+          <td data-text="ideal_weight"></td>
+        </tr>
+        <tr>
+          <td>Gender:</td>
+          <td data-text="sex"></td>
+        </tr>
+        <tr >
+          <td>Active Level:</td>
+          <td data-text="active_level_id"></td>
+        </tr>
+        <tr>
+          <td>Daily Necessary Consumption:</td>
+          <td data-text="daily_need"></td>
+        </tr>
+        <tr>
+          <td>KG to Reduce:</td>
+          <td data-text="kg_to_reduce"></td>
+        </tr>
+        <tr>
+          <td>Kcal per KG:</td>
+          <td data-text="kcal_per_kg"></td>
+        </tr>
+        <tr>
+          <td>Kcal to Reduce:</td>
+          <td data-text="kcal_to_reduce"></td>
+        </tr>
+        <tr>
+          <td>User Intake in Last 30days:</td>
+          <td data-text="user_intake"></td>
+        </tr>
+        <tr>
+          <td>Choose Activity:</td>
+          <td>
+            <select data-value="selected_exercise" onchange="selectExercise(this.value)">
+              <option value="running">Running</option>
+              <option value="swimming">Swimming</option>
+              <option value="walking">Walking</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>User Should Keep Exercises for (weeks):</td>
+          <td data-text="weeks_needed"></td>
+        </tr>
+        <tr>
+          <td>User Should Exercise per Week:</td>
+          <td data-text="exercise_per_week"></td>
+        </tr>
+
+      </table>
+    </template>
+  </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/data-template@1.7/base.js"></script>
+    <script>
+
+js
+'''
+let selectedExercise = 'running';
+
+function showUserTarget() {
+  getJSON('/user/target', (json) => {
+    console.log('user target:', json);
+    if (json.error) {
+      alert('Failed to get user target: ' + json.error);
+      return;
+    }
+
+    let { userTarget, sportsSelection, averageDailyCalories } = json;
+    userTarget.daily_need = userTarget.sex == 'female' ? 2000 : 2500;
+    userTarget.kg_to_reduce = userTarget.weight - userTarget.ideal_weight;
+    userTarget.kcal_per_kg = 7700;
+    userTarget.kcal_to_reduce =
+      userTarget.kcal_per_kg * userTarget.kg_to_reduce;
+
+    let monthlyNeedConsumption = userTarget.daily_need * 30.25;
+    let monthlyActualConsumption = averageDailyCalories * 30.25;
+    let userRun;
+    let activeLevelConversionRate;
+    let runPerWeek;
+
+    userTarget.user_intake = monthlyActualConsumption;
+
+    console.log(sportsSelection[0].sport_name);
+
+    let timesPerWeek = [];
+    timesPerWeek[1] = 2;
+    timesPerWeek[2] = 4;
+    timesPerWeek[3] = 5;
+    timesPerWeek[4] = 7.5;
+
+    let amountsPerTime = [];
+    amountsPerTime[1] = 1;
+    amountsPerTime[2] = 1;
+    amountsPerTime[3] = 1;
+    amountsPerTime[4] = 1.5;
+
+    let getExercisePerWeek = {
+      running: ({ timePerWeek, amountPerTime }) =>
+        `run ${timePerWeek} times per week, ${amountPerTime * 10}km each time`,
+      swimming: ({ timePerWeek, amountPerTime }) =>
+        `swim ${timePerWeek} times per week, ${amountPerTime}hr each time`,
+      walking: ({ timePerWeek, amountPerTime }) =>
+        `walk ${timePerWeek} times per week, ${amountPerTime}hr each time`,
+    };
+
+    let sports_consumption = {};
+    for (let sport of sportsSelection) {
+      sports_consumption[sport.sport_name] = sport.consumption;
+    }
+    let selected_sport_consumption =
+      sports_consumption[selectedExercise] || sportsSelection[0].consumption;
+
+    console.log('Selected sport name:', selectedExercise);
+    console.log('Selected sport consumption:', selected_sport_consumption);
+
+    /**
+     * Example
+     *
+     * actual intake 2500
+     * monthly need 2000
+     * want extra reduce 200
+     *
+     * monthly_amount_to_burn = 2500 - 2000 + 200
+     */
+
+    let monthly_amount_to_burn =
+      monthlyActualConsumption -
+      monthlyNeedConsumption +
+      userTarget.kcal_to_reduce;
+
+    let weekly_burn_amount =
+      selected_sport_consumption *
+      timesPerWeek[userTarget.active_level_id] *
+      amountsPerTime[userTarget.active_level_id];
+
+    let weeks_needed = monthly_amount_to_burn / weekly_burn_amount;
+
+    userTarget.weeks_needed = weeks_needed.toFixed(1);
+
+    userTarget.exercise_per_week = getExercisePerWeek[selectedExercise]({
+      timePerWeek: timesPerWeek[userTarget.active_level_id],
+      amountPerTime: amountsPerTime[userTarget.active_level_id],
+    });
+
+    userTarget.selected_exercise = selectedExercise;
+
+    renderTemplate(profileNode, json);
+  });
+}
+showUserTarget();
+
+function selectExercise(value) {
+  selectedExercise = value;
+  showUserTarget();
+}
+'''
+'''
+import {
+  Controller,
+  Post,
+  Body,
+  Redirect,
+  Get,
+  HttpException,
+  HttpStatus,
+  Request,
+  Session,
+  UnauthorizedException,
+  UseGuards,
+  NotFoundException,
+  Param,
+} from '@nestjs/common';
+import { UserService } from './user.service';
+import { date, number, object, string } from 'cast.ts';
+import { RegisterDto } from './dto/register.dto';
+import { ProfileDto } from './dto/profile.dto';
+// import * as bcrypt from 'bcrypt';
+import session from 'express-session';
+import { SessionType } from 'src/session';
+import { AuthGuard } from 'src/auth.guard';
+
+let loginParser = object({
+  username: string({ nonEmpty: true }),
+  password: string({ nonEmpty: true }),
+});
+
+// let regParser = object({
+//   username: string({ nonEmpty: true }),
+//   email: string({ nonEmpty: true }),
+//   password: string({ nonEmpty: true }),
+//   sex: string({ nonEmpty: true }),
+//   birthday: date(),
+//   height: number(),
+//   weight: number(),
+//   idealWeight: number(),
+//   activeLevel: string(),
+// });
+
+@Controller('user')
+export class UserController {
+  constructor(private userService: UserService) {}
+
+  @Redirect()
+  @Post('login')
+  async login(
+    @Body() body: unknown,
+    @Request() req: Request,
+    @Session() session: SessionType,
+  ) {
+    try {
+      let user = loginParser.parse(body);
+      let id = await this.userService.login(user);
+      // req.session.user_id = id;
+      console.log(id);
+      session.user_id = id;
+      session.save();
+      return { url: '/profile.html?id=' + id };
+    } catch (error) {
+      return {
+        url: '/login.html?' + new URLSearchParams({ error: String(error) }),
+      };
+    }
+  }
+
+  @Post('login-ajax')
+  async loginAjax(@Body() body: unknown) {
+    let users = loginParser.parse(body);
+    return await this.userService.login(users);
+  }
+
+  @Post('registration')
+  async registration(
+    @Body() body: RegisterDto,
+    @Session() session: SessionType,
+  ) {
+    try {
+      // let user = regParser.parse(body);
+      console.log({ body });
+      const registeredUser = await this.userService.register(body);
+      console.log({ url: '/profile.html?id=' + registeredUser });
+      // session.user_id = registeredUser;
+      // session.save();
+      return { url: '/profile.html?id=' + registeredUser };
+    } catch (err) {
+      console.log(err);
+
+      throw new HttpException(
+        { message: 'Registration failed', error: err },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  @Post('profile')
+  async updateProfile(
+    @Session() session: SessionType,
+    @Body() body: ProfileDto,
+  ) {
+    if (!session.user_id) throw new UnauthorizedException();
+    return await this.userService.updateProfile(session.user_id, body);
+    // const user_id = 4;
+    // return await this.userService.updateProfile(user_id, body);
+  }
+
+  @Post('logout')
+  async logout(@Session() session: SessionType): Promise<any> {
+    await new Promise<void>(function (resolve, reject) {
+      session.destroy((err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+    return {};
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard)
+  async getProfile(@Session() session: SessionType) {
+    const user_id = session.user_id;
+    // const user_id = 4;
+    if (!user_id) throw new UnauthorizedException();
+    return await this.userService.getProfile(user_id);
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body() data: { email: string }) {
+    const { email } = data;
+
+    await this.userService.sendPasswordResetEmail(email);
+    return { success: true };
+  }
+
+  @Post('update-password/:token')
+  async updatePassword(
+    @Body() data: { newPassword: string },
+    @Param('token') token: string,
+  ) {
+    const { newPassword } = data;
+    await this.userService.updatePasswordWithToken(token, newPassword);
+    return { success: true };
+  }
+
+  @Get('activelevel')
+  async getActiveLevel() {
+    return await this.userService.getActiveLevel();
+    // let result = await this.userService.getActiveLevel();
+    // console.log(result);
+  }
+
+  @Get('target')
+  @UseGuards(AuthGuard)
+  async getUserTarget(
+    @Request() req: Request,
+    @Session() session: SessionType,
+  ) {
+    const user_id = session.user_id;
+    // userId = 6;
+    if (!user_id) {
+      return { error: 'User not found' };
+    }
+
+    // const userId = 1;
+    return await this.userService.getUserTarget(user_id);
+  }
+
+  @Get('meal')
+  @UseGuards(AuthGuard)
+  async getUserMeal(@Request() req: Request, @Session() session: SessionType) {
+    const user_id = session.user_id;
+    if (!user_id) {
+      return { error: 'User not found' };
+    }
+
+    const userMeals = await this.userService.getUserMeal(user_id);
+
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    let totalCalories = 0;
+    for (const meal of userMeals.userMeal) {
+      const updatedAt = new Date(meal.timestamp);
+      if (updatedAt >= thirtyDaysAgo) {
+        totalCalories += meal.calories;
+      }
+    }
+    console.log('bbb,', totalCalories);
+
+    return { totalCalories };
+    // return await this.userService.getUserMeal(user_id);
+  }
+}
+'''
+'''
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectModel } from 'nest-knexjs';
+import { NotFoundError } from 'rxjs';
+import { Knex } from 'knex';
+import { RegisterDto } from './dto/register.dto';
+import * as bcrypt from 'bcrypt';
+import { ProfileDto } from './dto/profile.dto';
+import { string } from 'cast.ts';
+import { DAY } from '@beenotung/tslib/time';
+import { TimezoneDate } from 'timezone-date.ts';
+import { transporter } from '../mailer.transporter';
+import * as crypto from 'crypto';
+import { env } from 'src/env';
+// import { Transporter } from 'nodemailer';
+
+@Injectable()
+export class UserService {
+  registration(users: {
+    username: string;
+    email: string;
+    password: string;
+    sex: string;
+    birthday: Date;
+    height: string;
+    weight: string;
+    idealWeight: string;
+    activeLevel: string;
+  }) {
+    throw new Error('Method not implemented.');
+  }
+  constructor(
+    @InjectModel() private readonly knex: Knex, // private readonly transporter: Transporter,
+  ) {}
+
+  async login(user: { username: string; password: string }) {
+    let userInfo1 = await this.knex
+      .select('*')
+      .from('users')
+      .where('username', user.username);
+    console.log({ userInfo1 });
+
+    if (userInfo1.length === 0) {
+      throw new NotFoundException('user not found');
+    }
+
+    this.validateUserPassword(user, userInfo1[0].hash_password);
+
+    return userInfo1[0].id as number;
+  }
+
+  async register(users: RegisterDto) {
+    const {
+      username,
+      email,
+      password,
+      sex,
+      birthday,
+      height,
+      weight,
+      idealWeight,
+      activeLevel,
+    } = users;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const registeredUser = await this.knex
+
+      .table('users')
+      .insert({
+        username,
+        email,
+        hash_password: hashedPassword,
+        sex,
+        birthday,
+        height,
+        weight,
+        ideal_weight: idealWeight,
+        active_level_id: activeLevel,
+      })
+      .returning('id');
+    console.log('aaa:', registeredUser);
+
+    return registeredUser[0].id;
+  }
+  private validateUserPassword(
+    user: { username: string; password: string },
+    storedHashedPassword: string,
+  ) {
+    const passwordMatch = bcrypt.compareSync(
+      user.password,
+      storedHashedPassword,
+    );
+    if (!passwordMatch) {
+      throw new UnauthorizedException('Password does not match');
+    }
+  }
+
+  async updateProfile(userId: number, profile: ProfileDto) {
+    await this.knex('users').where('id', userId).update(profile);
+    return {};
+  }
+
+  async getProfile(userId: number) {
+    const result = await this.knex('users')
+      .select(
+        'username',
+        'email',
+        'sex',
+        'birthday',
+        'height',
+        'weight',
+        'active_level_id',
+        'ideal_weight',
+      )
+      .leftJoin('active_level', 'users.active_level_id', 'active_level.id')
+      .where('users.id', userId);
+    if (result.length === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+    const userData = result[0];
+    return userData;
+  }
+
+  async getActiveLevel() {
+    let activeLevelList = await this.knex('active_level').select(
+      'id',
+      'active_level',
+    );
+    return activeLevelList;
+  }
+
+  async getUserTarget(userId: number) {
+    const userTarget = await this.knex('users')
+      .select('weight', 'ideal_weight', 'active_level_id', 'sex')
+      .leftJoin('active_level', 'users.active_level_id', 'active_level.id')
+      .where('users.id', userId)
+      .first();
+    if (!userTarget) {
+      throw new NotFoundException('User not found');
+    }
+    const sportsSelection = await this.knex('calories_consumption').select(
+      'sport_name',
+      'consumption',
+    );
+
+    let users_meal_records = await this.knex('users_meal_record')
+      .select('food.calories', 'users_meal_record.timestamp')
+      .leftJoin('food', 'users_meal_record.food_id', 'food.id')
+      .leftJoin('users', 'users.id', 'users_meal_record.user_id')
+      .where('users.id', userId)
+      .andWhereRaw(
+        'users_meal_record.timestamp >= ?',
+        new Date(Date.now() - 30 * DAY).toISOString(),
+      );
+    console.log('users_meal_records:', users_meal_records);
+    let totalCalories = 0;
+    let days = new Set();
+    for (let { calories, timestamp } of users_meal_records) {
+      totalCalories += calories;
+      let date = new TimezoneDate(timestamp.getTime());
+      date.timezone = +8;
+      let day = date.getMonth() + 1 + '-' + date.getDate();
+      days.add(day);
+    }
+    console.log({ days, totalCalories });
+    let averageDailyCalories = totalCalories / days.size;
+    if (!averageDailyCalories) {
+      averageDailyCalories = 2250;
+    }
+
+    console.log({ userTarget, sportsSelection, averageDailyCalories });
+
+    return { userTarget, sportsSelection, averageDailyCalories };
+  }
+
+  async getUserMeal(userId: number) {
+    // userId = 3;
+    const userMeal = await this.knex('users_meal_record')
+      .select(
+        'users_meal_record.food_id',
+        'food.calories',
+        'users_meal_record.serving_size',
+        'users_meal_record.timestamp',
+      )
+      .leftJoin('food', 'users_meal_record.food_id', 'food.id')
+      .leftJoin('users', 'users.id', 'users_meal_record.user_id')
+      .where('users.id', userId);
+    if (!userMeal) {
+      throw new NotFoundException('User not found');
+    }
+
+    return { userMeal };
+  }
+
+  async sendPasswordResetEmail(email: string) {
+    const user = await this.knex('users').where('email', email).first();
+
+    if (!user) {
+      throw new Error('Email not found');
+    }
+
+    const resetToken = generateResetToken();
+    await this.knex('users').where('email', email).update({ resetToken });
+
+    const resetUrl = `${env.FRONTEND_ORIGIN}/update-password.html?token=${resetToken}`;
+    const mailOptions = {
+      from: env.EMAIL_ADDRESS,
+      to: email,
+      subject: 'Password Reset',
+      text: `We have received a request to reset your password. If it is you, please open the link below to reset your password:\n${resetUrl}`,
+      html: `
+      <p>
+      We have received a request to reset your password. If it is you, please open the link below to reset your password:\n${resetUrl}
+      <br>
+      <a href="${resetUrl}"></a>
+      </p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  }
+
+  async updatePasswordWithToken(token: string, newPassword: string) {
+    // Find the user with the provided token in the database
+    const user = await this.knex('users').where({ resetToken: token }).first();
+    if (!user) {
+      throw new NotFoundException('Invalid or expired reset token');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await this.knex('users')
+      .where({ id: user.id })
+      .update({ hash_password: hashedPassword, resetToken: null });
+  }
+}
+function generateResetToken(): string {
+  let token = crypto.randomBytes(16).toString('hex');
+
+  return token;
+}
+'''
+i have three requests:
+1. the ideal weight can be edit by the user, but their original input should be displayed
+        <tr>
+          <td>Ideal Weight:</td>
+          <td data-text="ideal_weight"></td>
+        </tr>
+
+2. i wanna let the user to choose the acitve level, and the activel level name would be displayed.  
+        <tr >
+          <td>Active Level:</td>
+          <td data-text="active_level_id"></td>
+        </tr>
+
+
+ id |   active_level    
+----+-------------------
+  1 | lightly active
+  2 | moderately active
+  3 | active
+  4 | very active
+
+3. the calucation of User Should Keep Exercises for (weeks):	
+User Should Exercise per Week:
+will be re calucated accordingly
+
+please try to show the code, revised part

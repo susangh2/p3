@@ -1,0 +1,46 @@
+body {
+  background-color: #CBD5C0 ;
+}
+.gradient-custom {
+  /* fallback for old browsers */
+  background: #CBD5C0;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to bottom right,
+    rgba(179,205,214, 1),
+    rgba(203,213,192, 1)
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(
+    to bottom right,
+   rgba(179,205,214, 1),
+    rgba(203,213,192, 1)
+  );
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+  font-size: 1rem;
+  line-height: 2.15;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+}
+.card-registration .select-arrow {
+  top: 13px;
+}
+
+.form-check-input:checked {
+  background-color: #7e8590;
+  border-color: #7e8590;
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #4f7f8f;
+  --bs-btn-hover-bg: #41626d;
+  --bs-btn-active-bg: #41626d;
+  --bs-btn-active-border-color: #41626d;
+  --bs-btn-border-color: #708eba;
+  --bs-btn-disabled-border-color: #7793bc;
+  --bs-btn-hover-border-color: #607595;}

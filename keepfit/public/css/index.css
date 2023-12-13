@@ -1,0 +1,85 @@
+
+      body {
+        background-image: url('../mealphotos/saladwithutensils.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+      }
+
+      /* .upper-part {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 3rem;
+        text-align: center;
+        margin-top: 3rem;
+        font-weight: bold;
+        font-style: Italic;
+      } */
+
+      nav {
+        z-index: 1;
+      }
+
+      .upper-part {
+        font-family: 'Montserrat', sans-serif;
+        text-transform: uppercase;
+        display: block;
+        font-size: 45px;
+        color: #bb9f81;
+        text-shadow:
+          0 8px 9px #c4b59d,
+          0px -2px 1px #d6c5b3;
+        font-weight: bold;
+        /* letter-spacing: -2px; */
+        text-align: center;
+        /* background: linear-gradient(to bottom, #ece4d9 0%, #e9dfd1 100%); */
+        position: absolute;
+        /* padding: 10px 10px; */
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /* border-radius: 20px; */
+        z-index: -1;
+      }
+
+      .upload-btn {
+        margin: auto;
+        margin-top: 35rem;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #7e97b8;
+        background-color: #e0e8ef;
+        border-style: solid;
+        border-width: 2px 2px 2px 2px;
+        border-color: rgba(255, 255, 255, 0.333);
+        border-radius: 40px 40px 40px 40px;
+        padding: 16px 24px 16px 28px;
+        transform: translate(0px, 0px) rotate(0deg);
+        transition: 0.2s;
+        box-shadow:
+          -4px -2px 16px 0px #ffffff,
+          4px 2px 16px 0px rgb(95 157 231 / 48%); 
+        display: block;
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+      }
+
+      .upload-btn:hover {
+        color: #516d91;
+        border-color: rgba(255, 255, 255, 0.333);
+        background-color: #e5edf5;
+        box-shadow:
+          -2px -1px 8px 0px #ffffff,
+          2px 1px 8px 0px rgb(95 157 231 / 48%);
+      }
+
+      .upload-btn:active {
+        border-color: rgba(255, 255, 255, 0.333);
+        box-shadow: none;
+      }
